@@ -6,14 +6,14 @@ import slugify from "slugify";
 
 
 
-// add new category
+// add new subcategory
 const addSubCategory = errorCatch(async (req, res, next) => {
     req.body.slug = slugify(req.body.name, '-')
     const subCategory = await Subcategory.insertMany(req.body)
     res.status(200).send({ message: "added successfully", subCategory })
 })
 
-// get all categories
+// get all subategories
 const getSubCategories = errorCatch(async (req, res, next) => {
     const subCategories = await Subcategory.find()
     res.status(200).send({ message: "success", subCategories })

@@ -6,6 +6,7 @@ import {
     updateBrand,
     deleteBrand
 } from "./brand.controller.js";
+import { uploadSingleFile } from "../../fileUpload/FileUpload.js";
 
 
 
@@ -15,13 +16,13 @@ const brandRouter = Router()
 
 brandRouter
     .route("/")
-    .post(addBrand)
+    .post(uploadSingleFile('logo', 'brands'), addBrand)
     .get(getBrands)
 
 brandRouter
     .route("/:id")
     .get(getBrand)
-    .put(updateBrand)
+    .put(uploadSingleFile('logo', 'brands'), updateBrand)
     .delete(deleteBrand)
 
 export default brandRouter

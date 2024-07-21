@@ -19,12 +19,12 @@ const schema = new Schema({
         type: String,
         required: true,
         minLength: 30,
-        maxLength:1000
+        maxLength: 1000
     },
     price: {
-        type:Number,
-        required:true,
-        min:0
+        type: Number,
+        required: true,
+        min: 0
     },
     priceAfterDiscount: Number,
     imgCover: String,
@@ -45,15 +45,15 @@ const schema = new Schema({
         ref: "Subcategory",
         required: true,
     },
-    Brand: {
+    brand: {
         type: Schema.Types.ObjectId,
         ref: "Brand",
         required: true,
     },
     sold: Number,
-    stock:{
-        type:Number,
-        min:0
+    stock: {
+        type: Number,
+        min: 0
     },
     createdBy: {
         type: Schema.Types.ObjectId,
@@ -63,4 +63,9 @@ const schema = new Schema({
 }, { timestamps: true, versionKey: false })
 
 
+schema.post('init', (doc) => {
+    if (doc.imgCover) doc.imgCover = "http://localhost:3000/uploads/products/" + doc.imgCover
+
+    if (doc.images) doc.images = doc.images.map(image => image = "http://localhost:3000/uploads/products/" + image)
+})
 export const Product = model("Product", schema)
