@@ -18,7 +18,7 @@ const brandRouter = Router()
 
 brandRouter
     .route("/")
-    .post(uploadSingleFile('logo', 'brands'), validate(addBrandVal), addBrand)
+    .post(uploadSingleFile('logo', 'brands'), addBrand)
     .get(getBrands)
 
 brandRouter

@@ -29,7 +29,7 @@ const getSubCategories = errorCatch(async (req, res, next) => {
 const getSubcategory = errorCatch(async (req, res, next) => {
     const subCategory = await Subcategory.findById(req.params.id)
     // instead of if condition to check if Subcategory we use it coz its faster
-    subCategory || next(new AppError("categoty not found"), 404)
+    subCategory || next(new AppError("Subcategoty not found"), 404)
     !subCategory || res.status(200).send({ message: "success", subCategory })
 })
 
@@ -37,14 +37,14 @@ const getSubcategory = errorCatch(async (req, res, next) => {
 const updateSubcategory = errorCatch(async (req, res, next) => {
     req.body.slug = slugify(req.body.name, '-')
     const subCategory = await Subcategory.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    subCategory || next(new AppError("categoty not found"), 404)
+    subCategory || next(new AppError("Subcategoty not found"), 404)
     !subCategory || res.status(200).send({ message: "updated successfully", subCategory })
 })
 
 // delete Subcategory by id
 const deleteSubcategory = errorCatch(async (req, res, next) => {
     const subCategory = await Subcategory.findByIdAndDelete(req.params.id)
-    subCategory || next(new AppError("categoty not found"), 404)
+    subCategory || next(new AppError("Subcategoty not found"), 404)
     !subCategory || res.status(200).send({ message: "deleted successfully", subCategory })
 })
 

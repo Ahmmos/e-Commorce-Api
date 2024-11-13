@@ -25,7 +25,7 @@ const getProducts = errorCatch(async (req, res, next) => {
 // get product by id
 const getProduct = errorCatch(async (req, res, next) => {
     const product = await Product.findById(req.params.id)
-    product || next(new AppError("categoty not found"), 404)
+    product || next(new AppError("Product not found"), 404)
     !product || res.status(200).send({ message: "success", product })
 })
 
@@ -36,14 +36,14 @@ const updateProduct = errorCatch(async (req, res, next) => {
     if (req.files.images) req.body.images = await ProductRmAndUpdate(req, Product)
 
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    product || next(new AppError("categoty not found"), 404)
+    product || next(new AppError("Product not found"), 404)
     !product || res.status(200).send({ message: "updated successfully", product })
 })
 
 // delete product by id
 const deleteProduct = errorCatch(async (req, res, next) => {
     const product = await Product.findByIdAndDelete(req.params.id)
-    product || next(new AppError("categoty not found"), 404)
+    product || next(new AppError("Product not found"), 404)
     !product || res.status(200).send({ message: "deleted successfully", product })
 
     // remove images and cover image after delete the product

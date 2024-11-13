@@ -26,7 +26,7 @@ const getBrands = errorCatch(async (req, res, next) => {
 const getBrand = errorCatch(async (req, res, next) => {
     const brand = await Brand.findById(req.params.id)
     // instead of if condition to check if brand we use it coz its faster
-    brand || next(new AppError("categoty not found"), 404)
+    brand || next(new AppError("Brand not found"), 404)
     !brand || res.status(200).send({ message: "success", brand })
 })
 
@@ -38,14 +38,14 @@ const updateBrand = errorCatch(async (req, res, next) => {
         req.body.logo = removeAndUpload(logo, req)
     }
     const brand = await Brand.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    brand || next(new AppError("categoty not found"), 404)
+    brand || next(new AppError("Brand not found"), 404)
     !brand || res.status(200).send({ message: "updated successfully", brand })
 })
 
 // delete brand by id
 const deleteBrand = errorCatch(async (req, res, next) => {
     const brand = await Brand.findByIdAndDelete(req.params.id)
-    brand || next(new AppError("categoty not found"), 404)
+    brand || next(new AppError("Brand not found"), 404)
     !brand || res.status(200).send({ message: "deleted successfully", brand })
 
     // delete logo
