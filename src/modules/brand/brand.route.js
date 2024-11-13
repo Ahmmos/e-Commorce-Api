@@ -7,6 +7,8 @@ import {
     deleteBrand
 } from "./brand.controller.js";
 import { uploadSingleFile } from "../../fileUpload/FileUpload.js";
+import { addBrandVal } from "./brand.validate.js";
+import { validate } from "../../middleWare/validate.js";
 
 
 
@@ -16,7 +18,7 @@ const brandRouter = Router()
 
 brandRouter
     .route("/")
-    .post(uploadSingleFile('logo', 'brands'), addBrand)
+    .post(uploadSingleFile('logo', 'brands'), validate(addBrandVal), addBrand)
     .get(getBrands)
 
 brandRouter

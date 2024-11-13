@@ -12,7 +12,7 @@ const categoryRouter = Router()
 
 categoryRouter
     .route("/")
-    .post(uploadSingleFile('image', 'categories'),validate(addCategoryVal), addCategory)
+    .post(uploadSingleFile('image', 'categories'), validate(addCategoryVal), addCategory)
     .get(getCategories)
 
 categoryRouter

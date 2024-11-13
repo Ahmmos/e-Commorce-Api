@@ -10,8 +10,11 @@ import path from "path";
 // add new category
 const addCategory = errorCatch(async (req, res, next) => {
     req.body.slug = slugify(req.body.name, '-')
-    if (req.file) req.body.image = req.file.filename
-    const category = await Category.insertMany(req.body)
+    req.body.image = req.file.filename
+    // const category = await Category.insertMany(req.body)
+    // res.status(200).send({ message: "added successfully", category })
+    let category = await Category(req.body)
+    await category.save()
     res.status(200).send({ message: "added successfully", category })
 })
 
@@ -31,7 +34,10 @@ const getCategory = errorCatch(async (req, res, next) => {
 
 // update category by id
 const updateCategory = errorCatch(async (req, res, next) => {
+
+    // to update slug if the name is changed 
     if (req.body.name) req.body.slug = slugify(req.body.name, '-')
+    // to update image if the image is changed
     if (req.file) {
         let { image } = await Category.findById(req.params.id)
         req.body.image = removeAndUpload(image, req)
@@ -47,11 +53,11 @@ const deleteCategory = errorCatch(async (req, res, next) => {
     const category = await Category.findByIdAndDelete(req.params.id)
     category || next(new AppError("categoty not found"), 404)
     !category || res.status(200).send({ message: "deleted successfully", category })
-    
-    // delete image
+
+    // delete image from folder
     if (category.image) {
-       let imgPath= (path.resolve() + category.image.split("3000")[1]).replace(/\\/g, '/')
-       fs.rmSync(imgPath)
+        let imgPath = (path.resolve() + category.image.split("3000")[1]).replace(/\\/g, '/')
+        fs.rmSync(imgPath)
     }
 
 })

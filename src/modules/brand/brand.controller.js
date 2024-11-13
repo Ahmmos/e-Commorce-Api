@@ -2,7 +2,7 @@
 import { errorCatch } from "../../middleWare/errorCatch.js";
 import slugify from "slugify";
 import { AppError } from "../../utils/appError.js";
-import { Brand } from "../../../database/models/brand.model copy.js";
+import { Brand } from "../../../database/models/brand.model.js";
 import fs from "fs";
 import path from "path";
 import { removeAndUpload } from "../../fileUpload/removeAndUpload.js";
@@ -11,7 +11,7 @@ import { removeAndUpload } from "../../fileUpload/removeAndUpload.js";
 // add new brand
 const addBrand = errorCatch(async (req, res, next) => {
     req.body.slug = slugify(req.body.name, '-')
-    if (req.file) req.body.logo = req.file.filename
+    req.body.logo = req.file.filename
     const brand = await Brand.insertMany(req.body)
     res.status(200).send({ message: "added successfully", brand })
 })
@@ -50,7 +50,6 @@ const deleteBrand = errorCatch(async (req, res, next) => {
 
     // delete logo
     if (brand.logo) {
-
         let imgPath= (path.resolve() + brand.logo.split("3000")[1]).replace(/\\/g, '/')
         fs.rmSync(imgPath)
      }

@@ -3,14 +3,20 @@ import { errorCatch } from "../../middleWare/errorCatch.js";
 import { AppError } from "../../utils/appError.js";
 import { Subcategory } from "../../../database/models/subcategory.model.js";
 import slugify from "slugify";
+import { Category } from "../../../database/models/category.model.js";
 
 
 
 // add new subcategory
 const addSubCategory = errorCatch(async (req, res, next) => {
-    req.body.slug = slugify(req.body.name, '-')
-    const subCategory = await Subcategory.insertMany(req.body)
-    res.status(200).send({ message: "added successfully", subCategory })
+    const category = await Category.findById(req.body.category)
+    if (category) {
+        req.body.slug = slugify(req.body.name, '-')
+        const subCategory = await Subcategory.insertMany(req.body)
+        res.status(200).send({ message: "added successfully", subCategory })
+    } else {
+        return next(new AppError("There is not category with this id", 404))
+    }
 })
 
 // get all subategories

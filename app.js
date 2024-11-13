@@ -1,4 +1,4 @@
-// use dto handel in error in the code 
+// used to handel in error in the code 
 process.on("uncaughtException", (err) => {
     console.log("error in code", err)
 })

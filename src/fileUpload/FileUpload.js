@@ -1,10 +1,15 @@
 import multer from "multer"
 import { v4 as uuidv4 } from 'uuid';
 import { AppError } from "../utils/appError.js";
+import slugify from "slugify";
 
 
 // dont forget to create folder called "uploads" and to use ==> app.use(static())
+
+
 // main function to upload file
+// storage ==> full control of the file you upload , 
+// fileFilter ==> ontrol which files should be uploaded and which should be skipped.   
 
 const fileUpload = (folderName) => {
     // disk storage gives you full control of the file you upload 
@@ -17,7 +22,8 @@ const fileUpload = (folderName) => {
         },
 
         filename: (req, file, cb) => {
-            cb(null, uuidv4() + "_" + file.originalname)
+            file.originalname = slugify(file.originalname)
+            cb(null, uuidv4() + "-" + file.originalname)
         }
     })
 

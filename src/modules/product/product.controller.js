@@ -10,8 +10,8 @@ import { ProductRmAndUpdate, rmProductImgs } from "../../fileUpload/removeAndUpl
 const addProduct = errorCatch(async (req, res, next) => {
     console.log(req.body)
     req.body.slug = slugify(req.body.title, '-')
-    if (req.files) req.body.imgCover = req.files.imgCover[0].filename
-    if (req.files) req.body.images = req.files.images.map(img => img.filename)
+    req.body.imgCover = req.files.imgCover[0].filename
+    req.body.images = req.files.images.map(img => img.filename)
     const product = await Product.insertMany(req.body)
     res.status(200).send({ message: "added successfully", product })
 })
