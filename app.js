@@ -6,8 +6,8 @@ process.on("uncaughtException", (err) => {
 import express from 'express'
 import { dbConnection } from './database/dbConnection.js'
 import { globalError } from './src/middleWare/globalErrorHandling.js'
-import {bootstrap} from './src/modules/bootstrap.js'
-
+import { bootstrap } from './src/modules/bootstrap.js'
+import 'dotenv/config'
 
 const app = express()
 const port = 3000

@@ -8,10 +8,6 @@ import { Schema, model } from "mongoose";
 
 const schema = new Schema({
     comment: String,
-    email: {
-        type: String,
-        required: true
-    },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
@@ -26,7 +22,7 @@ const schema = new Schema({
         type: Number,
         min: 0,
         max: 5,
-        required:true
+        required: true
     }
 }, { timestamps: true, versionKey: false })
 

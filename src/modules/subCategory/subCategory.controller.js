@@ -4,6 +4,7 @@ import { AppError } from "../../utils/appError.js";
 import { Subcategory } from "../../../database/models/subcategory.model.js";
 import slugify from "slugify";
 import { Category } from "../../../database/models/category.model.js";
+import { ApiFeature } from "../../utils/apiFeature.js";
 
 
 
@@ -12,7 +13,10 @@ const addSubCategory = errorCatch(async (req, res, next) => {
     const category = await Category.findById(req.body.category)
     if (category) {
         req.body.slug = slugify(req.body.name, '-')
-        const subCategory = await Subcategory.insertMany(req.body)
+
+        let subCategory = await Subcategory(req.body)
+        await subCategory.save()
+
         res.status(200).send({ message: "added successfully", subCategory })
     } else {
         return next(new AppError("There is not category with this id", 404))
@@ -21,8 +25,26 @@ const addSubCategory = errorCatch(async (req, res, next) => {
 
 // get all subategories
 const getSubCategories = errorCatch(async (req, res, next) => {
-    const subCategories = await Subcategory.find()
-    res.status(200).send({ message: "success", subCategories })
+    // mergeparams
+    let filterObj = {}
+    if (req.params.category) filterObj.category = req.params.category
+
+
+    let apiFeature = new ApiFeature(Subcategory.find(filterObj), req.query)
+        .pagination(Subcategory).fields().sort().search().filter()
+
+    let subcategories = await apiFeature.mongooseQuery
+    let totalSubcategories = await apiFeature.total
+
+    res.status(200).send({
+        message: "success", metadata: {
+            total: totalSubcategories,
+            currentPage: apiFeature.pageNumber,
+            limit: apiFeature.limit,
+            numberOfPages: Math.ceil(totalSubcategories / apiFeature.limit),
+            nextPage: apiFeature.nextPage
+        }, subcategories
+    })
 })
 
 // get Subcategory by id

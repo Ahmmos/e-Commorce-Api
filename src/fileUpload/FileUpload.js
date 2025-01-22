@@ -4,6 +4,7 @@ import { AppError } from "../utils/appError.js";
 import slugify from "slugify";
 
 
+
 // dont forget to create folder called "uploads" and to use ==> app.use(static())
 
 

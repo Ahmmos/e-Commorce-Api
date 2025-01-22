@@ -5,14 +5,14 @@ import { AppError } from "../../utils/appError.js";
 import { removeAndUpload } from "../../fileUpload/removeAndUpload.js";
 import fs from 'fs'
 import path from "path";
+import { ApiFeature } from "../../utils/apiFeature.js";
 
 
 // add new category
 const addCategory = errorCatch(async (req, res, next) => {
     req.body.slug = slugify(req.body.name, '-')
     req.body.image = req.file.filename
-    // const category = await Category.insertMany(req.body)
-    // res.status(200).send({ message: "added successfully", category })
+    
     let category = await Category(req.body)
     await category.save()
     res.status(200).send({ message: "added successfully", category })
@@ -20,8 +20,22 @@ const addCategory = errorCatch(async (req, res, next) => {
 
 // get all categories
 const getCategories = errorCatch(async (req, res, next) => {
-    const categories = await Category.find()
-    res.status(200).send({ message: "success", categories })
+
+    let apiFeature = new ApiFeature(Category.find(), req.query)
+        .pagination(Category).fields().sort().search().filter()
+
+    let categories = await apiFeature.mongooseQuery
+    let totalCategories = await apiFeature.total
+
+    res.status(200).send({
+        message: "success", metadata: {
+            total: totalCategories,
+            currentPage: apiFeature.pageNumber,
+            limit: apiFeature.limit,
+            numberOfPages: Math.ceil(totalCategories / apiFeature.limit),
+            nextPage: apiFeature.nextPage
+        }, categories
+    })
 })
 
 // get category by id

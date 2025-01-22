@@ -30,7 +30,7 @@ const schema = new Schema({
 
 // to add address to the image uploaded and show full address on databas
 schema.post('init', (doc) => {
-    if (doc.image) doc.image = "http://localhost:3000/uploads/categories/" + doc.image
+    if (doc.image) doc.image = process.env.BASE_URL + "categories/" + doc.image
 })
 
 

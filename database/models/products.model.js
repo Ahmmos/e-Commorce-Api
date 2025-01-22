@@ -64,13 +64,28 @@ const schema = new Schema({
         ref: "User"
     }
 
-}, { timestamps: true, versionKey: false })
+}, { timestamps: true, versionKey: false, toJSON: { virtuals: true }, id: false })
+
+
+// create virtual element will not save in datbase and target of it to use for population
+
+schema.virtual('ProductReviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'product'
+});
+
+//  to populate the ProductReviews of each product
+// but to work and appear you should make toJSON: { virtuals: true }  inside the schema
+
+schema.pre("findOne", function () {
+    this.populate("ProductReviews");
+})
 
 // to add address to the images uploaded and show full address on databas
-
 schema.post('init', (doc) => {
-    if (doc.imgCover) doc.imgCover = "http://localhost:3000/uploads/products/" + doc.imgCover
+    if (doc.imgCover) doc.imgCover = process.env.BASE_URL + "products/" + doc.imgCover
 
-    if (doc.images) doc.images = doc.images.map(image => image = "http://localhost:3000/uploads/products/" + image)
+    if (doc.images) doc.images = doc.images.map(image => image = process.env.BASE_URL + "products/" + image)
 })
 export const Product = model("Product", schema)
