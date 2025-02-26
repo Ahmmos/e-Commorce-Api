@@ -6,6 +6,13 @@ const addSubCategoryVal = Joi.object({
     category: Joi.string().hex().length(24).required()
 })
 
+const updateSubCategoryVal = Joi.object({
+    name: Joi.string().min(1).max(50),
+    category: Joi.string().hex().length(24),
+    id: Joi.string().hex().length(24).required()
+})
+
 export {
-    addSubCategoryVal
+    addSubCategoryVal,
+    updateSubCategoryVal
 }

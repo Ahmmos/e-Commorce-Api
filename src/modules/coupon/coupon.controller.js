@@ -23,7 +23,7 @@ const getCoupons = errorCatch(async (req, res, next) => {
         .pagination(Coupon).fields().sort().search().filter()
 
     let coupons = await apiFeature.mongooseQuery
-    let totalcoupons = await apiFeature.total
+    let totalcoupons = (await Coupon.find()).length
 
     res.status(200).send({
         message: "success", metadata: {

@@ -20,11 +20,14 @@ const addReview = errorCatch(async (req, res, next) => {
 // get all reviews
 const getReviews = errorCatch(async (req, res, next) => {
 
-    let apiFeature = new ApiFeature(Review.find(), req.query)
+    let filterObj = {}
+    if (req.params.product) filterObj.product = req.params.product
+
+    let apiFeature = new ApiFeature(Review.find(filterObj), req.query)
         .pagination(Review).fields().sort().search().filter()
 
     let reviews = await apiFeature.mongooseQuery
-    let totalReviews = await apiFeature.total
+    let totalReviews = (await Review.find(filterObj)).length
 
     res.status(200).send({
         message: "success", metadata: {

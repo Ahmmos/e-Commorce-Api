@@ -12,7 +12,7 @@ import { ApiFeature } from "../../utils/apiFeature.js";
 const addCategory = errorCatch(async (req, res, next) => {
     req.body.slug = slugify(req.body.name, '-')
     req.body.image = req.file.filename
-    
+
     let category = await Category(req.body)
     await category.save()
     res.status(200).send({ message: "added successfully", category })
@@ -25,7 +25,7 @@ const getCategories = errorCatch(async (req, res, next) => {
         .pagination(Category).fields().sort().search().filter()
 
     let categories = await apiFeature.mongooseQuery
-    let totalCategories = await apiFeature.total
+    let totalCategories = (await Category.find()).length
 
     res.status(200).send({
         message: "success", metadata: {

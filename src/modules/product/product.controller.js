@@ -21,11 +21,20 @@ const addProduct = errorCatch(async (req, res, next) => {
 
 // get all Products
 const getProducts = errorCatch(async (req, res, next) => {
+    // mergeparams
+    // for categories , subCategories and brands
+    // dustructure the params to get the category , subCategory and brand
 
-    let apiFeature = new ApiFeature(Product.find(), req.query)
+    const { category, subCategory, brand } = req.params;
+    const filterObj = { category, subCategory, brand };
+    // Remove undefined values from filterObj
+    Object.keys(filterObj).forEach(key => filterObj[key] === undefined && delete filterObj[key]);
+
+    let apiFeature = new ApiFeature(Product.find(filterObj), req.query)
         .pagination(Product).fields().sort().search().filter()
+
     let products = await apiFeature.mongooseQuery
-    let totalproducts = await apiFeature.total
+    let totalproducts = (await Product.find(filterObj)).length
 
     res.status(200).send({
         message: "success", metadata: {
@@ -61,9 +70,12 @@ const getProduct = errorCatch(async (req, res, next) => {
 
 // update product by id
 const updateProduct = errorCatch(async (req, res, next) => {
+    // update any field through the request body and images through files 
+
     if (req.body.title) req.body.slug = slugify(req.body.title, '-')
-    if (req.files.imgCover) req.body.imgCover = await ProductRmAndUpdate(req, Product)
-    if (req.files.images) req.body.images = await ProductRmAndUpdate(req, Product)
+    if (req.files) {
+        await ProductRmAndUpdate(req, Product)
+    }
 
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
     product || next(new AppError("Product not found"), 404)

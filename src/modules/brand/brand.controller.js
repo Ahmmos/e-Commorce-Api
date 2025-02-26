@@ -26,7 +26,8 @@ const getBrands = errorCatch(async (req, res, next) => {
         .pagination(Brand).fields().sort().search().filter()
 
     let brands = await apiFeature.mongooseQuery
-    let totalBrands = await apiFeature.total
+    let totalBrands = (await Brand.find()).length
+
 
     res.status(200).send({
         message: "success", metadata: {

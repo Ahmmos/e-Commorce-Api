@@ -26,15 +26,18 @@ const addSubCategory = errorCatch(async (req, res, next) => {
 // get all subategories
 const getSubCategories = errorCatch(async (req, res, next) => {
     // mergeparams
+    // categories/:category/subcategories
+
     let filterObj = {}
     if (req.params.category) filterObj.category = req.params.category
+
 
 
     let apiFeature = new ApiFeature(Subcategory.find(filterObj), req.query)
         .pagination(Subcategory).fields().sort().search().filter()
 
     let subcategories = await apiFeature.mongooseQuery
-    let totalSubcategories = await apiFeature.total
+    let totalSubcategories = (await Subcategory.find(filterObj)).length
 
     res.status(200).send({
         message: "success", metadata: {

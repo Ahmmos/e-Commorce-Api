@@ -9,7 +9,7 @@ import { Schema, model } from "mongoose";
 const schema = new Schema({
     title: {
         type: String,
-        unique: [true, "name is required"], // make name unique and "name is required" is custom error message 
+        unique: [true, "title is already exist"], // make name unique and "name is required" is custom error message 
         required: true,
         trim: true,
         minLength: [3, "brand name is too short"]
@@ -75,12 +75,15 @@ schema.virtual('ProductReviews', {
     foreignField: 'product'
 });
 
+
 //  to populate the ProductReviews of each product
 // but to work and appear you should make toJSON: { virtuals: true }  inside the schema
 
 schema.pre("findOne", function () {
     this.populate("ProductReviews");
 })
+
+
 
 // to add address to the images uploaded and show full address on databas
 schema.post('init', (doc) => {

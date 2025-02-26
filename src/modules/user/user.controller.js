@@ -19,7 +19,7 @@ const getUsers = errorCatch(async (req, res, next) => {
         .pagination(User).fields().sort().search().filter()
 
     let users = await apiFeature.mongooseQuery
-    let totalusers = await apiFeature.total
+    let totalusers = (await User.find()).length
 
     res.status(200).send({
         message: "success", metadata: {

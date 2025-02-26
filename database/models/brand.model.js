@@ -9,7 +9,7 @@ import { Schema, model } from "mongoose";
 const schema = new Schema({
     name: {
         type: String,
-        unique: [true, "name is required"], // make name unique and "name is required" is custom error message 
+        unique: [true, "name is unique"], // make name unique and "name is required" is custom error message 
         required: true,
         trim: true,
         minLength: [2, "brand name is too short"]

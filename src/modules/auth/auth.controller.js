@@ -3,6 +3,7 @@ import bcrypt from "bcrypt"
 import { AppError } from "../../utils/appError.js"
 import { errorCatch } from "../../middleWare/errorCatch.js"
 import jwt from "jsonwebtoken"
+import { sendEmail } from "../../mailSender/mail.js"
 
 
 
@@ -10,6 +11,7 @@ import jwt from "jsonwebtoken"
 // create new user and create token to login directly after success signup
 const signUp = errorCatch(async (req, res, next) => {
     let user = await User(req.body)
+    sendEmail(req.body.email)
     await user.save()
     user.password = undefined
 
@@ -22,8 +24,9 @@ const signUp = errorCatch(async (req, res, next) => {
 const signIn = errorCatch(async (req, res, next) => {
     const { email, password } = req.body
     const user = await User.findOne({ "email": email })
-
+    if (user.confirmEmail === false) return next(new AppError("please confirm your email firstly", 401))
     if (!user || !bcrypt.compareSync(password, user.password)) return next(new AppError("incorrect email or Password ", 401))
+
 
     jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET_KEY,
         (err, token) => res.status(200).json({ Message: "login successfully", token }))
@@ -91,10 +94,24 @@ const allowedTo = (...roles) => {
     })
 }
 
+// confirm email
+const confirmEmail = errorCatch(async (req, res, next) => {
+
+    jwt.verify(req.params.token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
+        if (err) next(new AppError("invalid email"), 400)
+        const user = await User.findOneAndUpdate({ email: decoded.email }, { confirmEmail: true })
+        user || next(new AppError("user not found"), 404)
+        res.status(200).send({ message: "email confirmed successfully", email: user.email })
+    })
+
+
+})
+
 export {
     signUp,
     signIn,
     changeUserPassword,
     protectedRoutes,
-    allowedTo
+    allowedTo,
+    confirmEmail
 }
