@@ -47,10 +47,10 @@ cd ecommerce-backend-api
 
 ```
 
-BASE_URL=your_database_uri
-JWT_SECRET_KEY=your_jwt_secret
-SALT_ROUNDES=Your_Number_of_rounds
-STRIPE_SECRET_KEY=your_payment_api_key
+- BASE_URL=your_database_uri
+- JWT_SECRET_KEY=your_jwt_secret
+- SALT_ROUNDES=Your_Number_of_rounds
+- STRIPE_SECRET_KEY=your_payment_api_key
 
 ````
 
