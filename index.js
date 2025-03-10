@@ -25,7 +25,6 @@ app.use(globalError)
 process.on("unhandeledRejection", (err) => {
     console.log("internal error", err)
 })
-app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
