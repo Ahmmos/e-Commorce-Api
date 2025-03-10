@@ -6,10 +6,15 @@ import { Product } from "../../../database/models/products.model.js";
 import { Order } from "../../../database/models/order.model.js";
 import { ApiFeature } from "../../utils/apiFeature.js";
 import Stripe from 'stripe';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 
-const stripe = new Stripe("sk_test_51QnCyxBXCkCXWKUUkMbGAPuxzJJvVlsE9ZVg8whPg30ihr2APk1cCPppfwFO1utO9YLAUuX1URq9TJb1YptZPp4r00DMy10lk4");
+const stripeString = process.env.DB_URL;
+
+
+const stripe = new Stripe(stripeString);
 
 
 
