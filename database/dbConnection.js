@@ -3,7 +3,7 @@ dotenv.config();
 
 import { connect } from 'mongoose';
 
-const connectionString = process.env.DB_URL;
+const connectionString = process.env.DB_URI;
 if (!connectionString) {
     console.error('DB_URL is not defined in your environment variables.');
     process.exit(1); // Optional: stop the process if no DB_URL
