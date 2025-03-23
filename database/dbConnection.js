@@ -9,7 +9,7 @@ if (!connectionString) {
     process.exit(1); // Optional: stop the process if no DB_URL
 }
 
-export const dbConnection = connect(connectionString).then(() => {
+export const dbConnection = connect("mongodb+srv://Ahmed_Mostafa:uTcJKIxPXCCr2A2v@e-commerce.nyu3b.mongodb.net/e-commerceApp").then(() => {
     console.log('connected to database successfully');
 }).catch((err) => {
     console.log('error in connecting to database', err);
