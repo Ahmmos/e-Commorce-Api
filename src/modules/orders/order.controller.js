@@ -150,13 +150,13 @@ const createWebhook = errorCatch(async (req, res, next) => {
     if (endpointSecret) {
         // Get the signature sent by Stripe
         const signature = request.headers['stripe-signature'].toString();
-        event = stripe.webhooks.constructEvent(req.body, signature, "whsec_GCYDgR2iZbCHU4E4zRln340LtLtevpdr");
+        event = stripe.webhooks.constructEvent(req.body, signature, "whsec_rgl1qVxondH7KwW9j8lSpVDx0BkyRSfi");
     }
     let checkout;
     // Handle the event
     if (event.type === 'checkout.session.completed') {
         checkout = event.data.object;
-   
+
         // find the user by email
         let user = await User.findOne({ email: checkout.customer_email })
         // find the cart of the logged user
