@@ -66,7 +66,8 @@ cd ecommerce-backend-api
 
 ## API Endpoints
 
-- PostMan documentation
+- You will find how to use each endpoint here in this link
+- [PostMan documentation](https://documenter.getpostman.com/view/34963338/2sB2ca5JzM)
 
 ## Contributing
 
