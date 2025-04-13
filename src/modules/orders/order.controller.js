@@ -156,39 +156,7 @@ const createWebhook = errorCatch(async (req, res, next) => {
     // Handle the event
     if (event.type === 'checkout.session.completed') {
         checkout = event.data.object;
-        // find the user by email
-        let user = await User.findOne({ email: checkout.customer_email })
-        // find the cart of the logged user
-        const cart = await Cart.findOne({ _id: checkout.client_reference_id, user: user._id })
-        if (!cart) next(new AppError("cart not found or you are not authorized to make order", 404))
-
-        // create order
-        const order = await Order({
-            user: user._id,
-            orderItems: cart.cartItems,
-            shippingAddress: checkout.metadata,
-            totalOrderPrice: checkout.amount_total / 100,
-            paymepaymentType: "card",
-            isPaid: true,
-            paidAt: Date.now()
-        })
-        await order.save()
-
-        // increment sold and decrement stock using bulkWrite
-        const products = cart.cartItems.map((item) => {
-            return ({
-                updateOne: {
-                    "filter": { _id: item.product },
-                    "update": { $inc: { sold: +item.quantity, stock: -item.quantity } }
-                }
-            })
-        })
-        // bulkWrite ==> used to update more than one option for more than document in only one trip which is faster 
-        Product.bulkWrite(products)
-        // clear user cart after purchase
-        await cart.deleteOne()
     }
-
     res.json({ message: "success", checkout });
 });
 
