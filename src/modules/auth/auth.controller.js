@@ -71,7 +71,7 @@ const protectedRoutes = errorCatch(async (req, res, next) => {
     })
     // 3- check userId
     const user = await User.findById(userPayload.userId)
-    if (!user) return next(new AppError("user not found", 404))
+    if (!user) return next(new AppError("invalid token.. user not found", 404))
 
     //4- token valid or not (check iat ==> intiated at)
     // use gettime to get time in milliseconds then transform to seconds
