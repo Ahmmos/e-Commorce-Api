@@ -12,10 +12,11 @@ dotenv.config();
 
 
 
-const stripeString = process.env.DB_URL;
+const stripeString = process.env.STRIPE_SECRET_KEY;
 
 
 const stripe = new Stripe(stripeString);
+
 
 
 
