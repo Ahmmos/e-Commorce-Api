@@ -26,7 +26,7 @@ const createCashOrder = errorCatch(async (req, res, next) => {
     const cart = await Cart.findOne({ _id: req.params.id, user: req.user._id })
     if (!cart) next(new AppError("cart not found or you are not authorized to make order", 404))
 
-    const totalOrderPrice = cart.cartTotalAfterDiscount || cart.calcTotalPrice
+    const totalOrderPrice = cart.cartTotalAfterDiscount || cart.totalCartPrice
     // create order
     const order = await Order({
         user: req.user._id,
@@ -109,7 +109,7 @@ const createCheckoutSession = errorCatch(async (req, res, next) => {
     const cart = await Cart.findOne({ _id: req.params.id, user: req.user._id })
     if (!cart) next(new AppError("cart not found or you are not authorized to make order", 404))
 
-    const totalOrderPrice = cart.cartTotalAfterDiscount || cart.calcTotalPrice
+    const totalOrderPrice = cart.cartTotalAfterDiscount || cart.totalCartPrice
 
     // from stripe documentation 
     // create session that has the total price with the name of the user if you want 
@@ -156,6 +156,7 @@ const createWebhook = errorCatch(async (req, res, next) => {
     // Handle the event
     if (event.type === 'checkout.session.completed') {
         checkout = event.data.object;
+   
         // find the user by email
         let user = await User.findOne({ email: checkout.customer_email })
         // find the cart of the logged user
