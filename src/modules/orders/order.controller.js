@@ -156,6 +156,7 @@ const createWebhook = errorCatch(async (req, res, next) => {
     // Handle the event
     if (event.type === 'checkout.session.completed') {
         checkout = event.data.object;
+<<<<<<< HEAD
    
         // find the user by email
         let user = await User.findOne({ email: checkout.customer_email })
@@ -188,8 +189,9 @@ const createWebhook = errorCatch(async (req, res, next) => {
         Product.bulkWrite(products)
         // clear user cart after purchase
         await cart.deleteOne()
+=======
+>>>>>>> c87f1b03bd1b81680a7a358476f9ce18ba71b3e4
     }
-
     res.json({ message: "success", checkout });
 });
 
